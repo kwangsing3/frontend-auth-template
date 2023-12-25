@@ -1,10 +1,37 @@
-import * as express from 'express';
+import express from 'express';
 import {engine} from 'express-handlebars';
 import session = require('express-session');
 
 const app = express();
 const PORT = 3000;
 
+const users: {firstName: string; email: string; password: string}[] = [
+  {
+    firstName: 'Tony',
+    email: 'tony@stark.com',
+    password: 'iamironman',
+  },
+  {
+    firstName: 'Steve',
+    email: 'captain@hotmail.com',
+    password: 'icandothisallday',
+  },
+  {
+    firstName: 'Peter',
+    email: 'peter@parker.com',
+    password: 'enajyram',
+  },
+  {
+    firstName: 'Natasha',
+    email: 'a@a',
+    password: 'a',
+  },
+  {
+    firstName: 'Nick',
+    email: 'nick@shield.com',
+    password: 'password',
+  },
+];
 //額外宣告
 declare module 'express-session' {
   interface SessionData {
@@ -19,7 +46,6 @@ const auth = (req: express.Request, res: express.Response, next: Function) => {
     console.log('not authenticated');
     return res.redirect('/');
   }
-
   return next();
 };
 
@@ -40,20 +66,53 @@ app.use(
     cookie: {maxAge: 1000 * 60 * 5}, //5 minutes
   })
 );
-//
-//
+
 app.get('/', (req, res) => {
   console.log(req.session);
   console.log(req.sessionID);
   if (req.session.user) {
     return res.redirect('/welcome');
   }
-  res.render('index');
+  res.render('login');
 });
 
 app.get('/welcome', auth, (req, res) => {
   const userName = req.session.id;
   return res.render('welcome', {message: `Welcome back, ${userName}!`});
 });
+app.get('/login', (req, res) => {
+  if (req.session.user) {
+    return res.redirect('/welcome');
+  }
+  return res.render('login');
+});
 
+app.post('/register', (req, res) => {
+  const {email, password} = req.body;
+  users.push({
+    firstName: '1',
+    email: email,
+    password: password,
+  });
+  return res.render('index', {alert: '註冊成功'});
+});
+app.post('/login', (req, res) => {
+  const {email, password} = req.body;
+  console.log(email, password);
+  if (email.trim() === '' || password.trim() === '') {
+    return res.render('index', {
+      alert: 'Password or email is incorrect, please try again!',
+    });
+  }
+  for (const user of users) {
+    if (user.email === email && user.password === password) {
+      req.session.user = user.firstName;
+      return res.redirect('/welcome');
+    }
+  }
+
+  return res.render('index', {
+    alert: 'Password or email is incorrect, please try again!',
+  });
+});
 app.listen(PORT, () => console.log(`Listening to server on port: ${PORT}`));

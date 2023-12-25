@@ -15,18 +15,12 @@
     //   "runtimeExecutable": "node"
     // }
     {
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "name": "nodemon",
-      "program": "${workspaceFolder}/app.js",
-      "preLaunchTask": "tsc: 建置 - tsconfig.json",
-      "request": "launch",
+      "type": "node",
+      "request": "attach",
+      "name": "Node: Nodemon",
+      "processId": "${command:PickProcess}",
       "restart": true,
-      "runtimeExecutable": "nodemon",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
+     
     }
   ]
 }

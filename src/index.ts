@@ -87,6 +87,13 @@ app.get('/login', (req, res) => {
   return res.render('login');
 });
 
+app.get('/register', (req, res) => {
+  if (req.session.user) {
+    return res.redirect('/welcome');
+  }
+  return res.render('register');
+});
+
 app.post('/register', (req, res) => {
   const {email, password} = req.body;
   users.push({
@@ -94,13 +101,13 @@ app.post('/register', (req, res) => {
     email: email,
     password: password,
   });
-  return res.render('index', {alert: '註冊成功'});
+  return res.render('register', {alert: '註冊成功'});
 });
 app.post('/login', (req, res) => {
   const {email, password} = req.body;
   console.log(email, password);
   if (email.trim() === '' || password.trim() === '') {
-    return res.render('index', {
+    return res.render('login', {
       alert: 'Password or email is incorrect, please try again!',
     });
   }
@@ -111,8 +118,18 @@ app.post('/login', (req, res) => {
     }
   }
 
-  return res.render('index', {
+  return res.render('login', {
     alert: 'Password or email is incorrect, please try again!',
   });
 });
+
+app.get('/logout', auth, (req, res) => {
+  req.session.destroy(() => {
+    console.log('session destroyed');
+  });
+  res.render('login', {
+    alert: 'You are logged out! Re-enter email and password to log in again!',
+  });
+});
+
 app.listen(PORT, () => console.log(`Listening to server on port: ${PORT}`));

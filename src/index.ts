@@ -77,7 +77,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/welcome', auth, (req, res) => {
-  const userName = req.session.id;
+  const userName = req.session.user;
   return res.render('welcome', {message: `Welcome back, ${userName}!`});
 });
 app.get('/login', (req, res) => {

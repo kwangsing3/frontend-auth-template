@@ -10,6 +10,14 @@
 - **靜態資源支援**：Express 靜態檔案服務
 - TypeScript 全覆蓋，型別安全
 
+## 畫面截圖
+
+| 登入頁 | 註冊頁 | 歡迎頁（登入後）|
+|--------|--------|----------------|
+| ![登入頁](screenshots/login.png) | ![註冊頁](screenshots/register.png) | ![歡迎頁](screenshots/welcome.png) |
+
+> 截圖於本機 `npm run dev` 啟動後擷取。樣式採用 Bootstrap CDN，若於離線環境瀏覽，畫面會以未套用 CSS 的原始樣貌呈現，但功能不受影響。
+
 ## 技術棧
 
 | 層級 | 套件 |
